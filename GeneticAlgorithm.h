@@ -28,7 +28,7 @@ public:
 
 	Gene(){}
 
-	//Ï´ÅÆËã·¨Éú³ÉËæ»úĞòÁĞ
+	//æ´—ç‰Œç®—æ³•ç”Ÿæˆéšæœºåºåˆ—
 	Gene(int n) {
 		for (int i = 0; i < n; i++) {
 			data.push_back(i);
@@ -37,7 +37,7 @@ public:
 		shuffle(data.begin(), data.end(), gen);
 	}
 
-	//¼ÆËãÊÊÓ¦¶È
+	//è®¡ç®—é€‚åº”åº¦
 	double getFitnessValue(vector<double> &d) {
 		double res = 0;
 		int n = data.size();
@@ -48,7 +48,7 @@ public:
 		return value = res;
 	}
 
-	//ÖØ¶¨Òå±È½Ïº¯Êı
+	//é‡å®šä¹‰æ¯”è¾ƒå‡½æ•°
 	bool operator < (const Gene &x) const {
 		return value < x.value;
 	}
@@ -56,29 +56,29 @@ public:
 
 class GA {
 public:
-	//²ÎÊı
-	int populationSize = 2000; //ÖÖÈº´óĞ¡
-	double num_child = 1.0f; //Éú³É×Ó´ú/¸¸´ú±ÈÀı
-	double p_crossover = 0.6f; //½»²æ¸ÅÂÊ
-	double p_mutation = 0.25f; //±äÒì¸ÅÂÊ
-	int elite = 1800; //¾«Ó¢¸öÌå
-	int times_iterate = 9000; //µü´ú´ÎÊı
+	//å‚æ•°
+	int populationSize = 2000; //ç§ç¾¤å¤§å°
+	double num_child = 1.0f; //ç”Ÿæˆå­ä»£/çˆ¶ä»£æ¯”ä¾‹
+	double p_crossover = 0.6f; //äº¤å‰æ¦‚ç‡
+	double p_mutation = 0.25f; //å˜å¼‚æ¦‚ç‡
+	int elite = 1800; //ç²¾è‹±ä¸ªä½“
+	int times_iterate = 3000; //è¿­ä»£æ¬¡æ•°
 
 	int n = 0;
 	//double ans = inf;
 	vector<Gene> population;
 	vector<double> distance;
 
-	//Éú³É0-1Ö®¼äµÄËæ»úÊı
+	//ç”Ÿæˆ0-1ä¹‹é—´çš„éšæœºæ•°
 	double randBetween01() {
 		return (double)(rand() % 10000) / 10000.0;
 	}
 
-	//¶ÁÈ¡ÎÄ¼ş²¢¼ÆËã³ÇÊĞ¾àÀë
+	//è¯»å–æ–‡ä»¶å¹¶è®¡ç®—åŸå¸‚è·ç¦»
 	void readFile(string filename) {
 		FILE *fp = fopen(filename.c_str(), "r");
 		if (fp == NULL) {
-			printf("¶ÁÈ¡ÎÄ¼şÊ§°Ü\n");
+			printf("è¯»å–æ–‡ä»¶å¤±è´¥\n");
 			return;
 		}
 
@@ -106,7 +106,7 @@ public:
 		*/
 	}
 
-	//ÖÖÈº³õÊ¼»¯
+	//ç§ç¾¤åˆå§‹åŒ–
 	void initPopulation() {
 		srand(time(0));
 		for (int i = 0; i < populationSize; i++) {
@@ -116,20 +116,20 @@ public:
 		}
 	}
 
-	//½»²æ
+	//äº¤å‰
 	void crossover(const Gene &p, const Gene &m, Gene &child1, Gene &child2) {
 		int mid = rand() % n;
 
 
 		child1 = p; child2 = m;
 
-		//½»²æ
+		//äº¤å‰
 		for (int i = 0; i < n - mid; i++) {
 			child1.data[i] = m.data[i + mid];
 			child2.data[i] = p.data[i + mid];
 		}
 
-		//ºóĞøÔªËØµÄÌî³ä
+		//åç»­å…ƒç´ çš„å¡«å……
 		int pos = 0;
 		for (int i = n - mid; i < n; i++) {		
 			int flag = 0;
@@ -164,7 +164,7 @@ public:
 		}
 	}
 
-	//±äÒì
+	//å˜å¼‚
 	void mutation(Gene &child) {
 		int l = rand() % n;
 		int r = rand() % n;
@@ -173,10 +173,10 @@ public:
 		swap(child.data[l], child.data[r]);
 	}
 
-	//µ¥´Îµü´ú
+	//å•æ¬¡è¿­ä»£
 	void iterate() {
-		//ÂÖÅÌ¶ÄÑ¡Ôñ½»²æ³Ø¸öÌå		
-		vector<Gene> parent; //½»²æ³Ø¸¸´ú
+		//è½®ç›˜èµŒé€‰æ‹©äº¤å‰æ± ä¸ªä½“		
+		vector<Gene> parent; //äº¤å‰æ± çˆ¶ä»£
 		{
 			double valueSum = 0;
 			for (int i = 0; i < population.size(); i++) {
@@ -199,15 +199,15 @@ public:
 			}
 		}
 
-		//½»²æºÍ±äÒì
+		//äº¤å‰å’Œå˜å¼‚
 		for (int i = 1; i < parent.size(); i += 2) {
 			Gene child1 = parent[i - 1], child2 = parent[i];
-			//½»²æ
+			//äº¤å‰
 			double random = randBetween01();
 			if (random < p_crossover) {			
 				crossover(parent[i - 1], parent[i], child1, child2);
 			}
-			//±äÒì
+			//å˜å¼‚
 			random = randBetween01();
 			if (random < p_mutation) {
 				mutation(child1);
@@ -224,14 +224,14 @@ public:
 			population.push_back(child2);
 		}
 
-		//±£Áô¾«Ó¢¸öÌå
+		//ä¿ç•™ç²¾è‹±ä¸ªä½“
 		sort(population.begin(), population.end());
 		vector<Gene> child_population;
 		for (int i = 0; i < elite; i++) {
 			child_population.push_back(population[i]);
 		}
 
-		//Ñ¡ÔñÊ£Óà¸öÌå
+		//é€‰æ‹©å‰©ä½™ä¸ªä½“
 		{
 			double valueSum = 0;
 			for (int i = 0; i < population.size(); i++) {
@@ -254,11 +254,11 @@ public:
 			}
 		}
 
-		//½»»»Êı¾İ
+		//äº¤æ¢æ•°æ®
 		swap(population, child_population);
 	}
 
-	//ÒÅ´«Ëã·¨Çó½â
+	//é—ä¼ ç®—æ³•æ±‚è§£
 	double solve(string filename) {
 		readFile(filename);
 		initPopulation();
@@ -266,7 +266,7 @@ public:
 		
 
 		for (int i = 0; i < times_iterate; i++) {
-			printf("µü´ú %d\n", i);
+			printf("è¿­ä»£ %d\n", i);
 			printf("%lf\n", population[0].value);
 			iterate();
 		}
@@ -277,7 +277,7 @@ public:
 		}
 		printf("value = %lf\n", ans.value);
 
-		//±£´æ½á¹û
+		//ä¿å­˜ç»“æœ
 		FILE *fp = fopen("result.txt", "w");
 		for (int i = 0; i < n; i++) {
 			fprintf(fp, "%d%c", ans.data[i], i == n - 1 ? '\n' : ' ');

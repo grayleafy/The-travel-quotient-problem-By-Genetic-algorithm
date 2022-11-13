@@ -32,12 +32,14 @@ for index in range(len(ls)):
 
 
 
-x2 = np.empty(n, dtype = float)
-y2 = np.empty(n, dtype = float)
+x2 = np.empty(n + 1, dtype = float)
+y2 = np.empty(n + 1, dtype = float)
 for index in range(n):
     x2[index] = x[id[index]]
     y2[index] = y[id[index]]
 
+x2[n] = x[id[0]]
+y2[n] = y[id[0]]
 
 plt.plot(x2, y2)
 plt.scatter(x2,y2)
